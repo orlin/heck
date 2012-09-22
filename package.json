@@ -1,0 +1,23 @@
+{ "name": "heck"
+, "description": "a kind of humorous euphemism, for handling http errors"
+, "keywords": [ "http", "custom", "error", "page", "handler", "vfs" ]
+, "version": "0.0.0"
+, "homepage": "http://github.com/orlin/heck"
+, "repository":
+  { "type": "git"
+  , "url": "git://github.com/orlin/heck.git"
+  }
+, "bugs":
+  { "mail": "om@soundsapiens.com"
+  , "url" : "http://github.com/orlin/heck/issues"
+  }
+, "author": "Orlin M Bozhinov <om@soundsapiens.com> (http://soundsapiens.com)"
+, "contributors": []
+, "dependencies":
+  { "coffee-script": "*"
+  }
+, "os" : [ "!win32" ]
+, "engines" : { "node" : "0.8.x", "npm": "1.1.x" }
+, "licenses": [ { "type": "Unlicense", "url" : "http://unlicense.org/" } ]
+}
+

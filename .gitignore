@@ -1,0 +1,25 @@
+.DS_Store
+log
+*~
+.#*
+.hgignore
+.hg/*
+.svn/*
+
+# Node
+node_modules
+npm-debug.log
+lib-cov
+*.seed
+*.log
+*.csv
+*.dat
+*.out
+*.pid
+*.gz
+
+docs
+pids
+logs
+results
+
