@@ -13,8 +13,13 @@
   }
 , "author": "Orlin M Bozhinov <om@soundsapiens.com> (http://soundsapiens.com)"
 , "contributors": []
+, "main": "index"
 , "dependencies":
   { "coffee-script": "*"
+  , "error-page": "*"
+  , "deepmerge": "*"
+  , "plates": "*"
+  , "errs": "*"
   }
 , "os" : [ "!win32" ]
 , "engines" : { "node" : "0.8.x", "npm": "1.1.x" }
