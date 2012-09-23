@@ -1,8 +1,5 @@
 # heck -- for http errors handling on node
 
-
-## What
-
     Sometimes errors happen.
     Being humorous about it,
     or making them pretty,
