@@ -25,18 +25,33 @@ errorTemplate = (req, res, data) ->
       res.writeHead data.code, "Content-Type": "text/html"
       map = plates.Map()
       if data.options.debug
-        map.where('class').is(data.options.debugClass).partial "
-<p><pre>#{JSON.stringify data, null, '  '}</pre></p>"
+        debugHTML  = data.options.debugBlock.start
+        debugHTML += JSON.stringify data, null, '  '
+        debugHTML += data.options.debugBlock.close
+        map.where('class').is(data.options.debugClass).partial debugHTML
+      for item in data.options.debugLess.classes
+        map.class(item).remove()
       res.end (plates.bind plate.toString(), data, map)
 
 
-# The defaults for `error-page` module options.
-heckOptions =
-  debug: if process.env.NODE_ENV is 'development' then true else false
-  "*": errorTemplate
+# The options: defaults and how they can be overridden.
+options = (input = {}) ->
+  defaults =
+    debug: if process.env.NODE_ENV is 'development' then true else false
+    debugLess:
+      classes: []
+    debugBlock:
+      start: '<p><pre class="prettyprint"><code class="language-js">'
+      close: '</code></pre></p>'
+    "*": errorTemplate
+
+  opts = merge defaults, input
+  unless opts.debug
+    opts.debugLess.classes = [ opts.debugClass ]
+  opts
 
 
-# Use this middleware before any errors happen, to override `heckOptions`.
+# Use this middleware before any errors happen - becomes `options`' `input`.
 module.exports.connect = (opts) ->
   (req, res, next) ->
     res.heckOptions = opts
@@ -50,7 +65,7 @@ module.exports.handler = (req, res, err, code) ->
   console.error err.stack || err
 
   # The configurable error-page options.
-  opts = merge heckOptions, res.heckOptions ? {}
+  opts = options res.heckOptions
 
   # The status code and error message.
   message = err.stack.message || err.message || err
