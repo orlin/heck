@@ -26,7 +26,9 @@ errorTemplate = (req, res, data) ->
       map = plates.Map()
       if data.options.debug
         map.where('class').is(data.options.debugClass).partial "
-<p><pre>#{JSON.stringify data, null, '  '}</pre></p>"
+<p><pre class=\"prettyprint\"><code class=\"language-js\">
+#{JSON.stringify data, null, '  '}
+</code></pre></p>"
       res.end (plates.bind plate.toString(), data, map)
 
 
