@@ -26,6 +26,11 @@ errorTemplate = (req, res, data) ->
       map = plates.Map()
       if data.options.debug
         debugHTML  = data.options.debugBlock.start
+        debugHTML += data.stack
+        debugHTML += data.options.debugBlock.close
+        debugHTML += '<br/>'
+        delete data.stack
+        debugHTML += data.options.debugBlock.start
         debugHTML += JSON.stringify data, null, '  '
         debugHTML += data.options.debugBlock.close
         map.where('class').is(data.options.debugClass).partial debugHTML
