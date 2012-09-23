@@ -5,6 +5,7 @@ plates = require 'plates'
 util = require 'util'
 errs = require 'errs'
 
+
 # An `error-page` handler, because `templar` wasn't working.
 errorTemplate = (req, res, data) ->
   template = if 400 <= data.code < 500 then "4xx" else "5xx"
@@ -28,10 +29,19 @@ errorTemplate = (req, res, data) ->
 <p><pre>#{JSON.stringify data, null, '  '}</pre></p>"
       res.end (plates.bind plate.toString(), data, map)
 
+
 # The defaults for `error-page` module options.
-errorOptions =
+heckOptions =
   debug: if process.env.NODE_ENV is 'development' then true else false
   "*": errorTemplate
+
+
+# Use this middleware before any errors happen, to override `heckOptions`.
+module.exports.connect = (opts) ->
+  (req, res, next) ->
+    res.heckOptions = opts
+    next()
+
 
 # Pass to `vfs-http-handler` or call directly.
 module.exports.handler = (req, res, err, code) ->
@@ -39,8 +49,8 @@ module.exports.handler = (req, res, err, code) ->
   err = errs.create err unless util.isError err
   console.error err.stack || err
 
-  # The error-page options can be overridden.
-  opts = merge errorOptions, req.errorHandlerOptions ? {}
+  # The configurable error-page options.
+  opts = merge heckOptions, res.heckOptions ? {}
 
   # The status code and error message.
   message = err.stack.message || err.message || err
@@ -62,10 +72,4 @@ module.exports.handler = (req, res, err, code) ->
   # Handle the error.
   res.error = new ErrorPage req, res, opts
   res.error status, message
-
-
-module.exports.connect = (opts) ->
-  (req, res, next) ->
-    req.errorHandlerOptions = opts
-    next()
 
