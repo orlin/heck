@@ -29,6 +29,8 @@ errorTemplate = (req, res, data) ->
         debugHTML += JSON.stringify data, null, '  '
         debugHTML += data.options.debugBlock.close
         map.where('class').is(data.options.debugClass).partial debugHTML
+      for item in data.options.debugLess.classes
+        map.class(item).remove()
       res.end (plates.bind plate.toString(), data, map)
 
 
@@ -36,12 +38,17 @@ errorTemplate = (req, res, data) ->
 options = (input = {}) ->
   defaults =
     debug: if process.env.NODE_ENV is 'development' then true else false
+    debugLess:
+      classes: []
     debugBlock:
       start: '<p><pre class="prettyprint"><code class="language-js">'
       close: '</code></pre></p>'
     "*": errorTemplate
 
-  merge defaults, input
+  opts = merge defaults, input
+  unless opts.debug
+    opts.debugLess.classes = [ opts.debugClass ]
+  opts
 
 
 # Use this middleware before any errors happen - becomes `options`' `input`.
