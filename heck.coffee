@@ -34,7 +34,7 @@ errorOptions =
   "*": errorTemplate
 
 # Pass to `vfs-http-handler` or call directly.
-module.exports = (req, res, err, code) ->
+module.exports.handler = (req, res, err, code) ->
   # Can pass err as a `String`, make it a real `Error`.
   err = errs.create err unless util.isError err
   console.error err.stack || err
@@ -62,4 +62,10 @@ module.exports = (req, res, err, code) ->
   # Handle the error.
   res.error = new ErrorPage req, res, opts
   res.error status, message
+
+
+module.exports.connect = (opts) ->
+  (req, res, next) ->
+    req.errorHandlerOptions = opts
+    next()
 
