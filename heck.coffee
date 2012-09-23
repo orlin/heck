@@ -24,24 +24,24 @@ errorTemplate = (req, res, data) ->
       # So that the pages can say more about what went wrong.
       res.writeHead data.code, "Content-Type": "text/html"
       map = plates.Map()
-      if data.options.debug
-        debugHTML  = data.options.debugBlock.start
-        debugHTML += data.stack
-        debugHTML += data.options.debugBlock.close
-        debugHTML += '<br/>'
-        delete data.stack
-        debugHTML += data.options.debugBlock.start
-        debugHTML += JSON.stringify data, null, '  '
-        debugHTML += data.options.debugBlock.close
-        map.where('class').is(data.options.debugClass).partial debugHTML
       for item in data.options.debugLess.classes
         map.class(item).remove()
+      debugClass = data.options.debugClass
+      start = data.options.debugBlock.start
+      close = data.options.debugBlock.close
+      if data.options.debug
+        debugHTML = start + data.stack + close + '<br/>'
+        delete data.stack
+        delete data.options unless data.show
+        debugHTML += start + (JSON.stringify data, null, '  ') + close
+        map.where('class').is(debugClass).partial debugHTML
       res.end (plates.bind plate.toString(), data, map)
 
 
 # The options: defaults and how they can be overridden.
 options = (input = {}) ->
   defaults =
+    show: false # these options when debug is true
     debug: if process.env.NODE_ENV is 'development' then true else false
     debugLess:
       classes: []
