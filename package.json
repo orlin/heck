@@ -1,7 +1,7 @@
 { "name": "heck"
 , "description": "a kind of humorous euphemism, for handling http errors"
 , "keywords": [ "http", "custom", "error", "page", "handler", "vfs" ]
-, "version": "0.0.3"
+, "version": "0.0.4"
 , "homepage": "http://github.com/orlin/heck"
 , "repository":
   { "type": "git"
