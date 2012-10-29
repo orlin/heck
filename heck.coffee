@@ -56,15 +56,28 @@ options = (input = {}) ->
   opts
 
 
+# What cannot continue further.
+forbidden = (req, opts) ->
+  if opts.forbidden?
+    for path in opts.forbidden
+      if req.path.match path
+        return true
+  false
+
+
 # Use this middleware before any errors happen - becomes `options`' `input`.
 module.exports.connect = (opts) ->
   (req, res, next) ->
     res.heckOptions = opts
-    next()
+    if forbidden req, opts
+      # TODO: a nice error page
+      res.error = new ErrorPage req, res
+      res.error 403, "Not Allowed"
+    else next()
 
 
 # Pass to `vfs-http-handler` or call directly.
-module.exports.handler = (req, res, err, code) ->
+module.exports.handler = handle = (req, res, err, code) ->
   # Can pass err as a `String`, make it a real `Error`.
   err = errs.create err unless util.isError err
   console.error err.stack || err
@@ -72,22 +85,28 @@ module.exports.handler = (req, res, err, code) ->
   # The configurable error-page options.
   opts = options res.heckOptions
 
-  # The status code and error message.
-  message = err.stack.message || err.message || err
-  if code then status = code
-  else switch err.code
-    when "EBADREQUEST"
-      status = 400
-    when "EACCESS"
-      status = 403
-    when "ENOENT"
-      status = 404
-    when "ENOTREADY"
-      status = 503
-    when "EISDIR"
-      # Directories must end with a '/'.
-      return res.redirect req.url + '/'
-    else status = 500
+  # Set the status code & error message.
+  if forbidden req, opts
+    # NOTE: this does not ever get used, because it's just for things that fail.
+    # Forbidden stuff has to be pre-checked in the connect middleware (200 too).
+    status = 403
+    message = "Not Allowed"
+  else
+    message = err.stack.message || err.message || err
+    if code then status = code
+    else switch err.code
+      when "EBADREQUEST"
+        status = 400
+      when "EACCESS"
+        status = 403
+      when "ENOENT"
+        status = 404
+      when "ENOTREADY"
+        status = 503
+      when "EISDIR"
+        # Directories must end with a '/'.
+        return res.redirect req.url + '/'
+      else status = 500
 
   # Handle the error.
   res.error = new ErrorPage req, res, opts
