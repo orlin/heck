@@ -1,7 +1,7 @@
 { "name": "heck"
 , "description": "a kind of humorous euphemism, for handling http errors"
 , "keywords": [ "http", "custom", "error", "page", "handler", "vfs" ]
-, "version": "0.0.4"
+, "version": "0.0.4-1"
 , "homepage": "http://github.com/orlin/heck"
 , "repository":
   { "type": "git"
@@ -22,7 +22,6 @@
   , "errs": "*"
   }
 , "os" : [ "!win32" ]
-, "engines" : { "node" : "0.8.x", "npm": "1.1.x" }
-, "licenses": [ { "type": "Unlicense", "url" : "http://unlicense.org/" } ]
+, "engines" : { "node" : "0.10.x" }
+, "license": "Unlicense"
 }
-
