@@ -1,0 +1,35 @@
+{
+  "name": "heck",
+  "version": "0.0.4-1",
+  "dependencies": {
+    "coffee-script": {
+      "version": "1.7.1",
+      "from": "coffee-script@1.7.1",
+      "dependencies": {
+        "mkdirp": {
+          "version": "0.3.5",
+          "from": "mkdirp@~0.3.5"
+        }
+      }
+    },
+    "deepmerge": {
+      "version": "0.2.7",
+      "from": "deepmerge@0.2.7",
+      "resolved": "https://registry.npmjs.org/deepmerge/-/deepmerge-0.2.7.tgz"
+    },
+    "error-page": {
+      "version": "0.0.7",
+      "from": "error-page@0.0.7",
+      "resolved": "https://registry.npmjs.org/error-page/-/error-page-0.0.7.tgz"
+    },
+    "errs": {
+      "version": "0.3.0",
+      "from": "errs@0.3.0",
+      "resolved": "https://registry.npmjs.org/errs/-/errs-0.3.0.tgz"
+    },
+    "plates": {
+      "version": "0.4.8",
+      "from": "plates@*"
+    }
+  }
+}
